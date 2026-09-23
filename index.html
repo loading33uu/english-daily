@@ -57,7 +57,6 @@
       padding: 0 20px;
     }
 
-    /* شريط التحكم بالسرعة */
     .controls-bar {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -104,9 +103,9 @@
     .cat-btn {
       background: var(--card-bg);
       border: 2px solid var(--border);
-      padding: 12px 24px;
+      padding: 12px 20px;
       border-radius: 12px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--text-main);
       cursor: pointer;
@@ -254,12 +253,14 @@
       padding: 25px;
       text-align: center;
       margin-top: 20px;
+      transition: all 0.3s ease;
     }
 
     .quiz-question {
       font-size: 1.2rem;
       font-weight: 700;
       margin-bottom: 20px;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .quiz-options {
@@ -268,6 +269,7 @@
       gap: 12px;
       max-width: 500px;
       margin: 0 auto;
+      transition: opacity 0.3s ease;
     }
 
     .quiz-btn {
@@ -277,7 +279,7 @@
       border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s ease;
     }
 
     .quiz-btn:hover {
@@ -285,9 +287,62 @@
       background: #e0f2fe;
     }
 
+    .quiz-btn.correct-btn {
+      background: #10b981 !important;
+      color: white !important;
+      border-color: #10b981 !important;
+      transform: scale(1.05);
+    }
+
+    .quiz-btn.wrong-btn {
+      background: #ef4444 !important;
+      color: white !important;
+      border-color: #ef4444 !important;
+    }
+
+    .quiz-box.success-pulse {
+      border-color: #10b981;
+      background: #ecfdf5;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    }
+
+    .quiz-box.error-pulse {
+      border-color: #ef4444;
+      background: #fef2f2;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+    }
+
+    .restart-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+
+    .restart-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .fade-anim {
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .quiz-feedback {
       margin-top: 15px;
       font-weight: 700;
+      font-size: 1.1rem;
+      min-height: 28px;
     }
   </style>
 </head>
@@ -300,7 +355,6 @@
 
   <div class="main-container">
 
-    <!-- شريط إعدادات التحكم بالسرعة -->
     <div class="controls-bar">
       <span>⚙️ إعدادات الصوتيّات:</span>
       <div class="speed-control">
@@ -315,27 +369,31 @@
     </div>
 
     <div class="nav-categories">
-      <button class="cat-btn active" onclick="switchCategory('airport', event)">المطار</button>
-      <button class="cat-btn" onclick="switchCategory('hospital', event)">المستشفى</button>
-      <button class="cat-btn" onclick="switchCategory('hotel', event)">الفندق</button>
-      <button class="cat-btn" onclick="switchCategory('office', event)">الإدارات والمكاتب</button>
-      <button class="cat-btn" onclick="switchCategory('shopping', event)">التسوق</button>
-      <button class="cat-btn" onclick="switchCategory('restaurant', event)">المطعم</button>
+      <button class="cat-btn active" onclick="switchCategory('airport', event)">✈️ المطار</button>
+      <button class="cat-btn" onclick="switchCategory('hospital', event)">🏥 المستشفى</button>
+      <button class="cat-btn" onclick="switchCategory('hotel', event)">🏨 الفندق</button>
+      <button class="cat-btn" onclick="switchCategory('office', event)">🏢 الإدارات والمكاتب</button>
+      <button class="cat-btn" onclick="switchCategory('shopping', event)">🛍️ التسوق</button>
+      <button class="cat-btn" onclick="switchCategory('restaurant', event)">🍽️ المطعم</button>
+      <button class="cat-btn" onclick="switchCategory('taxi', event)">🚖 التاكسي والنقل</button>
+      <button class="cat-btn" onclick="switchCategory('cafe', event)">☕ المقهى</button>
+      <button class="cat-btn" onclick="switchCategory('bank', event)">🏦 البنك والمال</button>
     </div>
 
     <div class="content-card">
       <h2 class="section-title">المفردات والعبارات الشائعة</h2>
       <div class="vocab-grid" id="vocabContainer"></div>
 
-      <h2 class="section-title" style="margin-top: 30px;">حوار تفاعلي</h2>
+      <h2 class="section-title" style="margin-top: 30px;">حوارات تفاعلية</h2>
       <div class="dialogue-list" id="dialogueContainer"></div>
     </div>
 
-    <div class="quiz-box">
-      <h3 style="margin-bottom: 10px; color: var(--accent-blue);">اختبر نفسك!</h3>
-      <div class="quiz-question" id="quizQuestion">ما معنى كلمة "Boarding Pass"؟</div>
+    <div class="quiz-box" id="quizBox">
+      <h3 style="margin-bottom: 10px; color: var(--accent-blue);">🧠 اختبر نفسك فـ هاد القسم!</h3>
+      <div class="quiz-question" id="quizQuestion">جارٍ تحميل السؤال...</div>
       <div class="quiz-options" id="quizOptions"></div>
       <div class="quiz-feedback" id="quizFeedback"></div>
+      <div id="quizActionContainer"></div>
     </div>
 
   </div>
@@ -347,13 +405,31 @@
           { en: 'Boarding Pass', ar: 'بطاقة الركوب' },
           { en: 'Passport Control', ar: 'مراقبة الجوازات' },
           { en: 'Baggage Claim', ar: 'استلام الأمتعة' },
-          { en: 'Flight Attendant', ar: 'مضيف الطائرة' }
+          { en: 'Flight Attendant', ar: 'مضيف الطائرة' },
+          { en: 'Terminal', ar: 'مبنى الركاب' },
+          { en: 'Gate Number', ar: 'رقم البوابة' },
+          { en: 'Delayed Flight', ar: 'رحلة متأخرة' },
+          { en: 'Carry-on Bag', ar: 'حقيبة اليد' },
+          { en: 'Customs Officer', ar: 'ضابط الجمارك' },
+          { en: 'Direct Flight', ar: 'رحلة مباشرة' }
         ],
         dialogue: [
           { speaker: 'a', en: 'Agent: May I see your passport and ticket, please?', ar: 'الموظف: هل يمكنني رؤية جواز سفرك وتذكرتك من فضلك؟' },
           { speaker: 'b', en: 'Passenger: Yes, here you go.', ar: 'المسافر: نعم، تفضل.' },
           { speaker: 'a', en: 'Agent: Do you have any bags to check in?', ar: 'الموظف: هل لديك أي حقائب لتسجيلها؟' },
-          { speaker: 'b', en: 'Passenger: Just this one suitcase and a backpack.', ar: 'المسافر: فقط هذه الحقيبة وحقيبة ظهر.' }
+          { speaker: 'b', en: 'Passenger: Just this one suitcase and a backpack.', ar: 'المسافر: فقط هذه الحقيبة وحقيبة ظهر.' },
+          { speaker: 'a', en: 'Agent: Is your flight direct or does it have a layover?', ar: 'الموظف: هل رحلتك مباشرة أم فيها توقف؟' },
+          { speaker: 'b', en: 'Passenger: It is a direct flight to London.', ar: 'المسافر: إنها رحلة مباشرة إلى لندن.' },
+          { speaker: 'a', en: 'Agent: Perfect. Here is your boarding pass. Gate B12.', ar: 'الموظف: ممتاز. تفضل بطاقة الركوب. البوابة B12.' }
+        ],
+        quizzes: [
+          { q: 'ما معنى كلمة "Boarding Pass"؟', options: ['بطاقة الركوب', 'مفتاح الغرفة', 'وصفة طبية', 'إيصال الشراء'], correct: 0 },
+          { q: 'ما معنى "Passport Control"؟', options: ['مراقبة الجوازات', 'غرفة الطوارئ', 'قائمة الطعام', 'استلام الأمتعة'], correct: 0 },
+          { q: 'كيف تقول "مبنى الركاب" بالإنجليزية؟', options: ['Terminal', 'Cashier', 'Gate', 'Prescription'], correct: 0 },
+          { q: 'ما معنى "Delayed Flight"؟', options: ['رحلة متأخرة', 'رحلة مباشرة', 'حقيبة يد', 'بوابة المغادرة'], correct: 0 },
+          { q: 'كيف تقول "حقيبة اليد" بالإنجليزية؟', options: ['Carry-on Bag', 'Customs Officer', 'Terminal', 'Flight Attendant'], correct: 0 },
+          { q: 'ما معنى كلمة "Baggage Claim"؟', options: ['استلام الأمتعة', 'مراقبة الجوازات', 'تأخير الرحلة', 'تسجيل الوصول'], correct: 0 },
+          { q: 'ما معنى "Customs Officer"؟', options: ['ضابط الجمارك', 'مضيف الطائرة', 'أمين الصندوق', 'السائق'], correct: 0 }
         ]
       },
       hospital: {
@@ -361,13 +437,30 @@
           { en: 'Emergency Room', ar: 'غرفة الطوارئ' },
           { en: 'Prescription', ar: 'وصفة طبية' },
           { en: 'Doctor', ar: 'طبيب' },
-          { en: 'Painkiller', ar: 'مسكن آلام' }
+          { en: 'Painkiller', ar: 'مسكن آلام' },
+          { en: 'Pharmacy', ar: 'صيدلية' },
+          { en: 'Blood Pressure', ar: 'ضغط الدم' },
+          { en: 'Appointment', ar: 'موعد طبي' },
+          { en: 'Allergy', ar: 'حساسية' },
+          { en: 'Symptoms', ar: 'أعراض' },
+          { en: 'Blood Test', ar: 'تحليل الدم' }
         ],
         dialogue: [
           { speaker: 'a', en: 'Doctor: What seems to be the problem today?', ar: 'الطبيب: ما هي المشكلة اليوم؟' },
           { speaker: 'b', en: 'Patient: I have a severe headache and a fever.', ar: 'المريض: لدي صداع شديد وحمى.' },
           { speaker: 'a', en: 'Doctor: How long have you felt this way?', ar: 'الطبيب: منذ متى وأنت تشعر بهذا؟' },
-          { speaker: 'b', en: 'Patient: It started yesterday morning.', ar: 'المريض: بدأ هذا منذ صباح الأمس.' }
+          { speaker: 'b', en: 'Patient: It started yesterday morning.', ar: 'المريض: بدأ هذا منذ صباح الأمس.' },
+          { speaker: 'a', en: 'Doctor: Are you allergic to any medication?', ar: 'الطبيب: هل لديك حساسية من أي دواء؟' },
+          { speaker: 'b', en: 'Patient: No, I don\'t have any allergies.', ar: 'المريض: لا، ليس لدي أي حساسية.' },
+          { speaker: 'a', en: 'Doctor: I will write you a prescription for painkillers.', ar: 'الطبيب: سأكتب لك وصفة طبية لمسكنات الآلام.' }
+        ],
+        quizzes: [
+          { q: 'ما معنى كلمة "Prescription"؟', options: ['وصفة طبية', 'مراقبة الجوازات', 'غرفة القياس', 'قائمة الطعام'], correct: 0 },
+          { q: 'ما معنى "Emergency Room"؟', options: ['غرفة الطوارئ', 'غرفة القياس', 'خدمة الغرف', 'المصعد'], correct: 0 },
+          { q: 'كيف تقول "مسكن آلام" بالإنجليزية؟', options: ['Painkiller', 'Doctor', 'Pharmacy', 'Receipt'], correct: 0 },
+          { q: 'ما معنى كلمة "Symptoms"؟', options: ['أعراض', 'أدوية', 'تحاليل', 'مواعيد'], correct: 0 },
+          { q: 'كيف تقول "حساسية" بالإنجليزية؟', options: ['Allergy', 'Blood Test', 'Appointment', 'Pressure'], correct: 0 },
+          { q: 'ما معنى "Blood Pressure"؟', options: ['ضغط الدم', 'تحليل الدم', 'وصفة طبية', 'مسكن آلام'], correct: 0 }
         ]
       },
       hotel: {
@@ -375,12 +468,30 @@
           { en: 'Reservation', ar: 'حجز' },
           { en: 'Room Key', ar: 'مفتاح الغرفة' },
           { en: 'Check-in', ar: 'تسجيل الوصول' },
-          { en: 'Room Service', ar: 'خدمة الغرف' }
+          { en: 'Room Service', ar: 'خدمة الغرف' },
+          { en: 'Elevator', ar: 'مصعد' },
+          { en: 'Check-out Time', ar: 'وقت المغادرة' },
+          { en: 'Single Room', ar: 'غرفة مفردة' },
+          { en: 'Double Bed', ar: 'سرير مزدوج' },
+          { en: 'Breakfast Included', ar: 'الإفطار مشمول' },
+          { en: 'Front Desk', ar: 'مكتب الاستقبال' }
         ],
         dialogue: [
           { speaker: 'a', en: 'Receptionist: Welcome! How can I help you?', ar: 'موظف الاستقبال: مرحباً بك! كيف يمكنني مساعدتك؟' },
           { speaker: 'b', en: 'Guest: I have a reservation under the name Smith.', ar: 'الضيف: لدي حجز باسم سميث.' },
-          { speaker: 'a', en: 'Receptionist: Here is your room key. You are in room 304.', ar: 'موظف الاستقبال: تفضل مفتاح غرفتك. أنت في الغرفة 304.' }
+          { speaker: 'a', en: 'Receptionist: Great! Is breakfast included in your stay?', ar: 'موظف الاستقبال: رائع! هل الإفطار مشمول في إقامتك؟' },
+          { speaker: 'b', en: 'Guest: Yes, it should be included.', ar: 'الضيف: نعم، يفترض أن يكون مشمولاً.' },
+          { speaker: 'a', en: 'Receptionist: Here is your room key. You are in room 304, 3rd floor.', ar: 'موظف الاستقبال: تفضل مفتاح غرفتك. أنت في الغرفة 304، الطابق الثالث.' },
+          { speaker: 'b', en: 'Guest: What time is check-out tomorrow?', ar: 'الضيف: ما هو وقت المغادرة غداً؟' },
+          { speaker: 'a', en: 'Receptionist: Check-out is at 11:00 AM.', ar: 'موظف الاستقبال: وقت المغادرة في الساعة 11:00 صباحاً.' }
+        ],
+        quizzes: [
+          { q: 'كيف تقول "مفتاح الغرفة" بالإنجليزية؟', options: ['Room Key', 'Emergency Room', 'Official ID', 'Table for two'], correct: 0 },
+          { q: 'ما معنى كلمة "Reservation"؟', options: ['حجز', 'خصم', 'وصفة طبية', 'توقيع'], correct: 0 },
+          { q: 'ما معنى كلمة "Elevator"؟', options: ['مصعد', 'صيدلية', 'مبنى الركاب', 'عداد'], correct: 0 },
+          { q: 'ما معنى "Front Desk"؟', options: ['مكتب الاستقبال', 'غرفة القياس', 'صراف آلي', 'محطة الباص'], correct: 0 },
+          { q: 'كيف تقول "تسجيل الوصول" بالإنجليزية؟', options: ['Check-in', 'Check-out', 'Room Service', 'Double Bed'], correct: 0 },
+          { q: 'ما معنى "Breakfast Included"؟', options: ['الإفطار مشمول', 'غرفة مفردة', 'سرير مزدوج', 'وقت المغادرة'], correct: 0 }
         ]
       },
       office: {
@@ -388,12 +499,27 @@
           { en: 'Application Form', ar: 'استمارة الطلب' },
           { en: 'Official ID', ar: 'هوية رسمية' },
           { en: 'Appointment', ar: 'موعد' },
-          { en: 'Signature', ar: 'توقيع' }
+          { en: 'Signature', ar: 'توقيع' },
+          { en: 'Documents', ar: 'وثائق / مستندات' },
+          { en: 'Manager', ar: 'مدير' },
+          { en: 'Stamp', ar: 'طابع / ختْم' },
+          { en: 'Department', ar: 'قسم / إدارة' },
+          { en: 'Copy', ar: 'نسخة' },
+          { en: 'Waiting List', ar: 'قائمة الانتظار' }
         ],
         dialogue: [
-          { speaker: 'a', en: 'Clerk: Please fill out this form first.', ar: 'الموظف: يرجى ملء هذه الاستمارة أولاً.' },
+          { speaker: 'a', en: 'Clerk: Please fill out this application form first.', ar: 'الموظف: يرجى ملء استمارة الطلب هذه أولاً.' },
           { speaker: 'b', en: 'Visitor: Do I need to sign at the bottom?', ar: 'الزائر: هل يجب أن أوقع في الأسفل؟' },
-          { speaker: 'a', en: 'Clerk: Yes, right here and attach your ID copy.', ar: 'الموظف: نعم، هنا بالضبط وأرفق نسخة من هويتك.' }
+          { speaker: 'a', en: 'Clerk: Yes, right here and attach your ID copy.', ar: 'الموظف: نعم، هنا بالضبط وأرفق نسخة من هويتك.' },
+          { speaker: 'b', en: 'Visitor: Should I bring the original documents too?', ar: 'الزائر: هل يجب أن أحضر الوثائق الأصلية أيضاً؟' },
+          { speaker: 'a', en: 'Clerk: Yes, we need to inspect them before stamping.', ar: 'الموظف: نعم، نحتاج إلى فحصها قبل الختم.' }
+        ],
+        quizzes: [
+          { q: 'ما معنى "Signature"؟', options: ['توقيع', 'موعد', 'استمارة', 'هوية'], correct: 0 },
+          { q: 'ما معنى كلمة "Appointment"؟', options: ['موعد', 'حجز', 'خصم', 'فاتورة'], correct: 0 },
+          { q: 'ما معنى كلمة "Stamp" فـ الإدارات؟', options: ['ختْم', 'نسخة', 'استمارة', 'بطاقة'], correct: 0 },
+          { q: 'كيف تقول "استمارة الطلب" بالإنجليزية؟', options: ['Application Form', 'Official ID', 'Waiting List', 'Department'], correct: 0 },
+          { q: 'ما معنى "Documents"؟', options: ['وثائق / مستندات', 'مواعيد', 'طوابع', 'إدارات'], correct: 0 }
         ]
       },
       shopping: {
@@ -401,11 +527,29 @@
           { en: 'Fitting Room', ar: 'غرفة القياس' },
           { en: 'Discount', ar: 'تخفيض / خصم' },
           { en: 'Receipt', ar: 'إيصال الشراء' },
-          { en: 'Cashier', ar: 'أمين الصندوق' }
+          { en: 'Cashier', ar: 'أمين الصندوق' },
+          { en: 'Credit Card', ar: 'بطاقة ائتمان' },
+          { en: 'Price Tag', ar: 'بطاقة السعر' },
+          { en: 'Refund', ar: 'استرجاع المبلغ' },
+          { en: 'Size Medium', ar: 'مقاس متوسط' },
+          { en: 'Shopping Bag', ar: 'كيس تسوق' },
+          { en: 'Special Offer', ar: 'عرض خاص' }
         ],
         dialogue: [
-          { speaker: 'a', en: 'Customer: How much is this shirt?', ar: 'الزبون: بكم هذا القميص؟' },
-          { speaker: 'b', en: 'Seller: It is twenty dollars, and it is on sale.', ar: 'البائع: إنه بعشرين دولاراً، وهو في التخفيضات.' }
+          { speaker: 'a', en: 'Customer: How much is this blue jacket?', ar: 'الزبون: بكم هذه السترة الزرقاء؟' },
+          { speaker: 'b', en: 'Seller: It is $50, but we have a 20% discount today.', ar: 'البائع: إنها بـ 50 دولار، لكن لدينا خصم 20% اليوم.' },
+          { speaker: 'a', en: 'Customer: Can I try it on in the fitting room?', ar: 'الزبون: هل يمكنني قياسها في غرفة القياس؟' },
+          { speaker: 'b', en: 'Seller: Sure, the fitting rooms are right around the corner.', ar: 'البائع: بالتأكيد، غرف القياس موجودة عند الزاوية.' },
+          { speaker: 'a', en: 'Customer: It fits well! I will pay by credit card.', ar: 'الزبون: المقاس مناسب! سأدفع بالبطاقة البنكية.' },
+          { speaker: 'b', en: 'Seller: Here is your receipt and shopping bag. Thank you!', ar: 'البائع: تفضل الإيصال وكيس التسوق. شكراً لك!' }
+        ],
+        quizzes: [
+          { q: 'ما معنى كلمة "Discount"؟', options: ['تخفيض / خصم', 'توقيع', 'موعد', 'استلام الأمتعة'], correct: 0 },
+          { q: 'ما معنى "Fitting Room"؟', options: ['غرفة القياس', 'غرفة الطوارئ', 'خدمة الغرف', 'محطة'], correct: 0 },
+          { q: 'كيف تقول "إيصال الشراء" بالإنجليزية؟', options: ['Receipt', 'Menu', 'Fare', 'Ticket'], correct: 0 },
+          { q: 'ما معنى كلمة "Refund"؟', options: ['استرجاع المبلغ', 'تخفيض', 'عرض خاص', 'مقاس كبير'], correct: 0 },
+          { q: 'كيف تقول "بطاقة السعر" بالإنجليزية؟', options: ['Price Tag', 'Credit Card', 'Cashier', 'Shopping Bag'], correct: 0 },
+          { q: 'ما معنى "Cashier"؟', options: ['أمين الصندوق', 'غرفة القياس', 'خصم', 'إيصال'], correct: 0 }
         ]
       },
       restaurant: {
@@ -413,16 +557,152 @@
           { en: 'Menu', ar: 'قائمة الطعام' },
           { en: 'Waiter', ar: 'نادل' },
           { en: 'Bill', ar: 'الفاتورة / الحساب' },
-          { en: 'Table for two', ar: 'طاولة لشخصين' }
+          { en: 'Table for two', ar: 'طاولة لشخصين' },
+          { en: 'Dessert', ar: 'حلويات' },
+          { en: 'Appetizers', ar: 'مقبلات' },
+          { en: 'Main Course', ar: 'الطبق الرئيسي' },
+          { en: 'Tip', ar: 'إكرامية (إكرامية النادل)' },
+          { en: 'Mineral Water', ar: 'ماء معدني' },
+          { en: 'Delicious', ar: 'لذيذ' }
         ],
         dialogue: [
-          { speaker: 'a', en: 'Waiter: Are you ready to order?', ar: 'النادل: هل أنت جاهز للطلب؟' },
-          { speaker: 'b', en: 'Customer: Yes, I would like the grilled chicken, please.', ar: 'الزبون: نعم، أريد الدجاج المشوي من فضلك.' }
+          { speaker: 'a', en: 'Waiter: Good evening! A table for two?', ar: 'النادل: مساء الخير! طاولة لشخصين؟' },
+          { speaker: 'b', en: 'Customer: Yes, please. Can we have the menu?', ar: 'الزبون: نعم من فضلك. هل يمكننا الحصول على قائمة الطعام؟' },
+          { speaker: 'a', en: 'Waiter: Here you go. Are you ready to order starters?', ar: 'النادل: تفضلوا. هل أنتم جاهزون لطلب المقبلات؟' },
+          { speaker: 'b', en: 'Customer: Yes, we will take a soup and grilled chicken for the main course.', ar: 'الزبون: نعم، سنأخذ حساء ودجاج مشوي كطبق رئيسي.' },
+          { speaker: 'a', en: 'Waiter: Excellent choice! Would you like any dessert later?', ar: 'النادل: اختيار ممتاز! هل ترغبون فـ أي حلويات لاحقاً؟' },
+          { speaker: 'b', en: 'Customer: We will see after the main course, thanks!', ar: 'الزبون: سنرى بعد الطبق الرئيسي، شكراً!' }
+        ],
+        quizzes: [
+          { q: 'ما معنى كلمة "Menu"؟', options: ['قائمة الطعام', 'الفاتورة', 'الوصفة', 'المصعد'], correct: 0 },
+          { q: 'كيف تقول "الحساب / الفاتورة" فـ المطعم؟', options: ['Bill', 'Receipt', 'Discount', 'Fare'], correct: 0 },
+          { q: 'ما معنى "Main Course"؟', options: ['الطبق الرئيسي', 'مقبلات', 'حلويات', 'عصير'], correct: 0 },
+          { q: 'كيف تقول "إكرامية النادل" بالإنجليزية؟', options: ['Tip', 'Bill', 'Menu', 'Dessert'], correct: 0 },
+          { q: 'ما معنى كلمة "Appetizers"؟', options: ['مقبلات', 'حلويات', 'طبق رئيسي', 'مشروبات'], correct: 0 },
+          { q: 'ما معنى "Table for two"؟', options: ['طاولة لشخصين', 'قائمة الطعام', 'فاتورة الحساب', 'ماء معدني'], correct: 0 }
+        ]
+      },
+      taxi: {
+        vocab: [
+          { en: 'Destination', ar: 'الوجهة / المكان المطلوب' },
+          { en: 'Fare', ar: 'أجرة الطريق' },
+          { en: 'Taximeter', ar: 'عداد التاكسي' },
+          { en: 'Keep the change', ar: 'احتفظ بالباقي' },
+          { en: 'Bus Station', ar: 'محطة الحافلات' },
+          { en: 'Traffic Jam', ar: 'ازدحام مروري' },
+          { en: 'Fasten Seatbelt', ar: 'ربط حزام الأمان' },
+          { en: 'Drop off', ar: 'إنزال / إنزال راكب' },
+          { en: 'Pickup', ar: 'أخذ / تقل راكب' },
+          { en: 'Luggage', ar: 'أمتعة' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Passenger: Take me to the city center, please.', ar: 'المسافر: خذني إلى وسط المدينة من فضلك.' },
+          { speaker: 'b', en: 'Driver: Sure! Please fasten your seatbelt.', ar: 'السائق: بالتأكيد! يرجى ربط حزام الأمان.' },
+          { speaker: 'a', en: 'Passenger: Is there much traffic jam right now?', ar: 'المسافر: هل هناك ازدحام مروري كبير الآن؟' },
+          { speaker: 'b', en: 'Driver: A little bit, but we will arrive in 15 minutes.', ar: 'السائق: القليل، لكن سنصل خلال 15 دقيقة.' },
+          { speaker: 'a', en: 'Passenger: How much is the fare on the taximeter?', ar: 'المسافر: كم تبلغ الأجرة على العداد؟' },
+          { speaker: 'b', en: 'Driver: That will be $18.', ar: 'السائق: ستكون 18 دولاراً.' },
+          { speaker: 'a', en: 'Passenger: Here is $20, keep the change!', ar: 'المسافر: تفضل 20 دولاراً، واحتفظ بالباقي!' }
+        ],
+        quizzes: [
+          { q: 'ما معنى كلمة "Fare" فـ التاكسي؟', options: ['أجرة الطريق', 'عداد', 'حزام الأمان', 'محطة'], correct: 0 },
+          { q: 'ما معنى عبارة "Keep the change"؟', options: ['احتفظ بالباقي', 'شغل العداد', 'ربط الحزام', 'قف هنا'], correct: 0 },
+          { q: 'ما معنى "Traffic Jam"؟', options: ['ازدحام مروري', 'محطة حافلات', 'عداد', 'أمتعة'], correct: 0 },
+          { q: 'كيف تقول "الوجهة" بالإنجليزية؟', options: ['Destination', 'Taximeter', 'Luggage', 'Pickup'], correct: 0 },
+          { q: 'ما معنى "Fasten Seatbelt"؟', options: ['ربط حزام الأمان', 'احتفظ بالباقي', 'إنزال راكب', 'ازدحام مروري'], correct: 0 }
+        ]
+      },
+      cafe: {
+        vocab: [
+          { en: 'Black Coffee', ar: 'قهوة سوداء' },
+          { en: 'Takeaway', ar: 'طلب خارجي' },
+          { en: 'Sugar', ar: 'سكر' },
+          { en: 'Croissant', ar: 'كرواسون' },
+          { en: 'Green Tea', ar: 'شاي أخضر' },
+          { en: 'Skimmed Milk', ar: 'حليب خالي الدسم' },
+          { en: 'Espresso', ar: 'إسبريسو' },
+          { en: 'Iced Coffee', ar: 'قهوة مثلجة' },
+          { en: 'Bakery', ar: 'مخبز / معجنات' },
+          { en: 'Sweetener', ar: 'محلي اصطناعي' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Barista: Welcome! What can I get for you today?', ar: 'صانع القهوة: مرحباً! ماذا يمكنني أن أقدم لك اليوم؟' },
+          { speaker: 'b', en: 'Customer: A medium iced coffee with skimmed milk, please.', ar: 'الزبون: قهوة مثلجة متوسطة مع حليب خالي الدسم من فضلك.' },
+          { speaker: 'a', en: 'Barista: Sure! Do you want any sugar or sweetener?', ar: 'صانع القهوة: بالتأكيد! هل تريد سكر أم محلي اصطناعي؟' },
+          { speaker: 'b', en: 'Customer: Just a little sugar. And one chocolate croissant.', ar: 'الزبون: القليل من السكر فقط. وواحدة كرواسون بالشكولاتة.' },
+          { speaker: 'a', en: 'Barista: Is that for here or takeaway?', ar: 'صانع القهوة: هل هذا هنا أم طلب خارجي؟' },
+          { speaker: 'b', en: 'Customer: Takeaway, please.', ar: 'الزبون: طلب خارجي من فضلك.' }
+        ],
+        quizzes: [
+          { q: 'كيف تقول "طلب خارجي" فـ المقهى؟', options: ['Takeaway', 'Dessert', 'ATM', 'Check-in'], correct: 0 },
+          { q: 'ما معنى كلمة "Sugar"؟', options: ['سكر', 'شاي', 'قهوة', 'حليب'], correct: 0 },
+          { q: 'ما معنى "Iced Coffee"؟', options: ['قهوة مثلجة', 'قهوة سوداء', 'شاي أخضر', 'حليب'], correct: 0 },
+          { q: 'كيف تقول "حليب خالي الدسم" بالإنجليزية؟', options: ['Skimmed Milk', 'Black Coffee', 'Sweetener', 'Espresso'], correct: 0 },
+          { q: 'ما معنى كلمة "Bakery"؟', options: ['مخبز / معجنات', 'قهوة سوداء', 'مقهى', 'سكر'], correct: 0 }
+        ]
+      },
+      bank: {
+        vocab: [
+          { en: 'ATM Machine', ar: 'صراف آلي' },
+          { en: 'Withdraw money', ar: 'سحب أموال' },
+          { en: 'Deposit', ar: 'إيداع' },
+          { en: 'Exchange Currency', ar: 'صرف / تحويل العملات' },
+          { en: 'Bank Account', ar: 'حساب بنكي' },
+          { en: 'Exchange Rate', ar: 'سعر الصرف' },
+          { en: 'PIN Code', ar: 'الرمز السري' },
+          { en: 'Transfer Money', ar: 'تحويل أموال' },
+          { en: 'Savings Account', ar: 'حساب التوفير' },
+          { en: 'Balance Check', ar: 'التحقق من الرصيد' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Teller: Good morning! How can I assist you today?', ar: 'الموظف: صباح الخير! كيف يمكنني مساعدتك اليوم؟' },
+          { speaker: 'b', en: 'Customer: I would like to exchange Euros to Dollars.', ar: 'الزبون: أريد تحويل الأورو إلى الدولار.' },
+          { speaker: 'a', en: 'Teller: What is the current amount you want to exchange?', ar: 'الموظف: ما هو المبلغ الذي تريد تحويله؟' },
+          { speaker: 'b', en: 'Customer: 300 Euros, please. What is the exchange rate today?', ar: 'الزبون: 300 أورو من فضلك. كم هو سعر الصرف اليوم؟' },
+          { speaker: 'a', en: 'Teller: 1 Euro is currently 1.10 Dollars. Please show me your passport.', ar: 'الموظف: 1 أورو يساوي 1.10 دولار حالياً. يرجى إظهار جواز سفرك.' }
+        ],
+        quizzes: [
+          { q: 'ما معنى "ATM Machine"؟', options: ['صراف آلي', 'حساب بنكي', 'بطاقة الركوب', 'إيصال'], correct: 0 },
+          { q: 'ما معنى عبارة "Withdraw money"؟', options: ['سحب أموال', 'إيداع أموال', 'تحويل العملات', 'فتح حساب'], correct: 0 },
+          { q: 'ما معنى "Exchange Rate"؟', options: ['سعر الصرف', 'الرمز السري', 'الرصيد', 'حساب التوفير'], correct: 0 },
+          { q: 'كيف تقول "إيداع" بالإنجليزية؟', options: ['Deposit', 'Withdraw', 'Transfer', 'Balance'], correct: 0 },
+          { q: 'ما معنى "PIN Code"؟', options: ['الرمز السري', 'سعر الصرف', 'حساب بنكي', 'صراف آلي'], correct: 0 },
+          { q: 'ما معنى "Transfer Money"؟', options: ['تحويل أموال', 'سحب أموال', 'إيداع', 'التحقق من الرصيد'], correct: 0 }
         ]
       }
     };
 
     let currentCategory = 'airport';
+    let currentQuizIndex = 0;
+    let activeQuizzes = [];
+    let isAnswering = false;
+
+    // دالة خلط مصفوفة عشوائياً (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+      let shuffled = JSON.parse(JSON.stringify(array));
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    // تجهيز الأسئلة مع خلط خيارات كل سؤال
+    function prepareQuizzes(categoryKey) {
+      const originalQuizzes = data[categoryKey].quizzes || [];
+      const shuffledQuestions = shuffleArray(originalQuizzes);
+
+      return shuffledQuestions.map(q => {
+        const correctAnswerText = q.options[q.correct];
+        const shuffledOptions = shuffleArray(q.options);
+        const newCorrectIndex = shuffledOptions.indexOf(correctAnswerText);
+        return {
+          q: q.q,
+          options: shuffledOptions,
+          correct: newCorrectIndex
+        };
+      });
+    }
 
     function speakText(text) {
       if ('speechSynthesis' in window) {
@@ -432,7 +712,6 @@
         const utterance = new SpeechSynthesisUtterance(cleanText);
         utterance.lang = 'en-US';
         
-        // قراءة قيمة السرعة المحددة من القائمة
         const selectedSpeed = parseFloat(document.getElementById('speedRate').value);
         utterance.rate = selectedSpeed;
         
@@ -445,9 +724,16 @@
 
     function switchCategory(cat, evt) {
       currentCategory = cat;
+      resetAndStartQuiz();
       document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
       if(evt) evt.target.classList.add('active');
       renderContent();
+    }
+
+    function resetAndStartQuiz() {
+      currentQuizIndex = 0;
+      isAnswering = false;
+      activeQuizzes = prepareQuizzes(currentCategory);
       loadQuiz();
     }
 
@@ -474,37 +760,86 @@
       `).join('');
     }
 
-    const quizData = [
-      { q: 'ما معنى كلمة "Boarding Pass"؟', options: ['بطاقة الركوب', 'مفتاح الغرفة', 'وصفة طبية', 'إيصال الشراء'], correct: 0 },
-      { q: 'ما معنى كلمة "Prescription"؟', options: ['مراقبة الجوازات', 'وصفة طبية', 'غرفة القياس', 'قائمة الطعام'], correct: 1 },
-      { q: 'كيف تقول "مفتاح الغرفة" بالإنجليزية؟', options: ['Room Key', 'Emergency Room', 'Official ID', 'Table for two'], correct: 0 },
-      { q: 'ما معنى كلمة "Discount"؟', options: ['توقيع', 'موعد', 'تخفيض / خصم', 'استلام الأمتعة'], correct: 2 }
-    ];
-
     function loadQuiz() {
-      const randomQuiz = quizData[Math.floor(Math.random() * quizData.length)];
-      document.getElementById('quizQuestion').innerText = randomQuiz.q;
-      document.getElementById('quizFeedback').innerText = '';
-
+      const quizBox = document.getElementById('quizBox');
+      const feedback = document.getElementById('quizFeedback');
+      const questionEl = document.getElementById('quizQuestion');
       const optionsContainer = document.getElementById('quizOptions');
-      optionsContainer.innerHTML = randomQuiz.options.map((opt, idx) => `
-        <button class="quiz-btn" onclick="checkAnswer(${idx}, ${randomQuiz.correct})">${opt}</button>
+      const actionContainer = document.getElementById('quizActionContainer');
+
+      quizBox.classList.remove('success-pulse', 'error-pulse');
+      feedback.innerText = '';
+      actionContainer.innerHTML = '';
+      isAnswering = false;
+
+      if (!activeQuizzes || activeQuizzes.length === 0) {
+        questionEl.innerText = 'لا توجد أسئلة متاحة حالياً لهذا القسم.';
+        optionsContainer.innerHTML = '';
+        return;
+      }
+
+      // النهاية - إتمام كافّة الأسئلة بنجاح
+      if (currentQuizIndex >= activeQuizzes.length) {
+        quizBox.classList.add('success-pulse');
+        questionEl.innerText = '';
+        optionsContainer.innerHTML = '';
+        feedback.innerText = '🎉 أحسنت! لقد أتممت كلمات هذا الفصل بنجاح 👏';
+        feedback.style.color = '#10b981';
+        actionContainer.innerHTML = `<button class="restart-btn" onclick="resetAndStartQuiz()">🔄 إعادة الاختبار من جديد</button>`;
+        return;
+      }
+
+      const currentQuiz = activeQuizzes[currentQuizIndex];
+
+      questionEl.classList.remove('fade-anim');
+      optionsContainer.classList.remove('fade-anim');
+      void questionEl.offsetWidth; // Trigger reflow
+      questionEl.classList.add('fade-anim');
+      optionsContainer.classList.add('fade-anim');
+
+      questionEl.innerText = `[سؤال ${ currentQuizIndex + 1 } / ${activeQuizzes.length}] : ${currentQuiz.q}`;
+
+      optionsContainer.innerHTML = currentQuiz.options.map((opt, idx) => `
+        <button class="quiz-btn" id="btn-${idx}" onclick="checkAnswer(${idx}, ${currentQuiz.correct})">${opt}</button>
       `).join('');
     }
 
     function checkAnswer(selected, correct) {
+      if (isAnswering) return;
+
       const feedback = document.getElementById('quizFeedback');
+      const quizBox = document.getElementById('quizBox');
+      const selectedBtn = document.getElementById(`btn-${selected}`);
+
       if (selected === correct) {
-        feedback.innerText = '✨ إجابة صحيحة! أحسنت.';
+        isAnswering = true;
+        selectedBtn.classList.add('correct-btn');
+        quizBox.classList.add('success-pulse');
+        
+        feedback.innerText = '✨ إجابة صحيحة! أحسنت 👏';
         feedback.style.color = '#10b981';
+
+        setTimeout(() => {
+          currentQuizIndex++;
+          loadQuiz();
+        }, 1200);
+
       } else {
-        feedback.innerText = '❌ إجابة خاطئة، حاول مرة أخرى.';
+        isAnswering = true;
+        selectedBtn.classList.add('wrong-btn');
+        quizBox.classList.add('error-pulse');
+        feedback.innerText = '❌ إجابة خاطئة! أعد المراجعة.';
         feedback.style.color = '#ef4444';
+
+        // إعادة الكويز وإعادة الترتيب عشوائياً بعد الإجابة الخاطئة
+        setTimeout(() => {
+          resetAndStartQuiz();
+        }, 1600);
       }
     }
 
     renderContent();
-    loadQuiz();
+    resetAndStartQuiz();
   </script>
 </body>
 </html>
