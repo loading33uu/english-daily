@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تعلم الإنجليزية للمواقف اليومية | Daily English</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --accent-green: #10b981;
+      --accent-blue: #0ea5e9;
+      --border: #e2e8f0;
+      --shadow: 0 4px 15px -3px rgba(0,0,0,0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding-bottom: 50px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      padding: 35px 20px;
+      text-align: center;
+      border-bottom: 5px solid var(--primary);
+    }
+
+    header h1 {
+      font-family: 'Poppins', 'Tajawal', sans-serif;
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+
+    .main-container {
+      max-width: 1000px;
+      margin: 25px auto 0;
+      padding: 0 20px;
+    }
+
+    .nav-categories {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 10px 5px;
+      margin-bottom: 25px;
+      scrollbar-width: thin;
+    }
+
+    .cat-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .cat-btn:hover, .cat-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-right: 4px solid var(--primary);
+      padding-right: 12px;
+    }
+
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+
+    .vocab-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .vocab-card:hover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .en-term {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary);
+      display: block;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .ar-term {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .btn-audio {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .vocab-card:hover .btn-audio {
+      background: var(--primary-hover);
+    }
+
+    .dialogue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .dialogue-bubble {
+      padding: 16px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-right: 4px solid #cbd5e1;
+      background: #f1f5f9;
+    }
+
+    .dialogue-bubble:hover {
+      background: #e2e8f0;
+      transform: translateX(-3px);
+    }
+
+    .dialogue-bubble.speaker-a {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .dialogue-bubble.speaker-b {
+      border-color: var(--accent-green);
+      background: #ecfdf5;
+    }
+
+    .dialogue-en {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      direction: ltr;
+      text-align: left;
+    }
+
+    .dialogue-ar {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .quiz-box {
+      background: #f0f9ff;
+      border: 2px dashed var(--accent-blue);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .quiz-question {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .quiz-btn {
+      padding: 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .quiz-btn:hover {
+      border-color: var(--accent-blue);
+      background: #e0f2fe;
+    }
+
+    .quiz-feedback {
+      margin-top: 15px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>English for Daily Life</h1>
+    <p>تعلم اللغة الإنجليزية للمواقف اليومية بالصوت التفاعلي والترجمة</p>
+  </header>
+
+  <div class="main-container">
+
+    <div class="nav-categories">
+      <button class="cat-btn active" onclick="switchCategory('airport', event)">المطار</button>
+      <button class="cat-btn" onclick="switchCategory('hospital', event)">المستشفى</button>
+      <button class="cat-btn" onclick="switchCategory('hotel', event)">الفندق</button>
+      <button class="cat-btn" onclick="switchCategory('office', event)">الإدارات والمكاتب</button>
+      <button class="cat-btn" onclick="switchCategory('shopping', event)">التسوق</button>
+      <button class="cat-btn" onclick="switchCategory('restaurant', event)">المطعم</button>
+    </div>
+
+    <div class="content-card">
+      <h2 class="section-title">المفردات والعبارات الشائعة</h2>
+      <div class="vocab-grid" id="vocabContainer"></div>
+
+      <h2 class="section-title" style="margin-top: 30px;">حوار تفاعلي</h2>
+      <div class="dialogue-list" id="dialogueContainer"></div>
+    </div>
+
+    <div class="quiz-box">
+      <h3 style="margin-bottom: 10px; color: var(--accent-blue);">اختبر نفسك!</h3>
+      <div class="quiz-question" id="quizQuestion">ما معنى كلمة "Boarding Pass"؟</div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const data = {
+      airport: {
+        vocab: [
+          { en: 'Boarding Pass', ar: 'بطاقة الركوب' },
+          { en: 'Passport Control', ar: 'مراقبة الجوازات' },
+          { en: 'Baggage Claim', ar: 'استلام الأمتعة' },
+          { en: 'Flight Attendant', ar: 'مضيف الطائرة' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Agent: May I see your passport and ticket, please?', ar: 'الموظف: هل يمكنني رؤية جواز سفرك وتذكرتك من فضلك؟' },
+          { speaker: 'b', en: 'Passenger: Yes, here you go.', ar: 'المسافر: نعم، تفضل.' },
+          { speaker: 'a', en: 'Agent: Do you have any bags to check in?', ar: 'الموظف: هل لديك أي حقائب لتسجيلها؟' },
+          { speaker: 'b', en: 'Passenger: Just this one suitcase and a backpack.', ar: 'المسافر: فقط هذه الحقيبة وحقيبة ظهر.' }
+        ]
+      },
+      hospital: {
+        vocab: [
+          { en: 'Emergency Room', ar: 'غرفة الطوارئ' },
+          { en: 'Prescription', ar: 'وصفة طبية' },
+          { en: 'Doctor', ar: 'طبيب' },
+          { en: 'Painkiller', ar: 'مسكن آلام' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Doctor: What seems to be the problem today?', ar: 'الطبيب: ما هي المشكلة اليوم؟' },
+          { speaker: 'b', en: 'Patient: I have a severe headache and a fever.', ar: 'المريض: لدي صداع شديد وحمى.' },
+          { speaker: 'a', en: 'Doctor: How long have you felt this way?', ar: 'الطبيب: منذ متى وأنت تشعر بهذا؟' },
+          { speaker: 'b', en: 'Patient: It started yesterday morning.', ar: 'المريض: بدأ هذا منذ صباح الأمس.' }
+        ]
+      },
+      hotel: {
+        vocab: [
+          { en: 'Reservation', ar: 'حجز' },
+          { en: 'Room Key', ar: 'مفتاح الغرفة' },
+          { en: 'Check-in', ar: 'تسجيل الوصول' },
+          { en: 'Room Service', ar: 'خدمة الغرف' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Receptionist: Welcome! How can I help you?', ar: 'موظف الاستقبال: مرحباً بك! كيف يمكنني مساعدتك؟' },
+          { speaker: 'b', en: 'Guest: I have a reservation under the name Smith.', ar: 'الضيف: لدي حجز باسم سميث.' },
+          { speaker: 'a', en: 'Receptionist: Here is your room key. You are in room 304.', ar: 'موظف الاستقبال: تفضل مفتاح غرفتك. أنت في الغرفة 304.' }
+        ]
+      },
+      office: {
+        vocab: [
+          { en: 'Application Form', ar: 'استمارة الطلب' },
+          { en: 'Official ID', ar: 'هوية رسمية' },
+          { en: 'Appointment', ar: 'موعد' },
+          { en: 'Signature', ar: 'توقيع' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Clerk: Please fill out this form first.', ar: 'الموظف: يرجى ملء هذه الاستمارة أولاً.' },
+          { speaker: 'b', en: 'Visitor: Do I need to sign at the bottom?', ar: 'الزائر: هل يجب أن أوقع في الأسفل؟' },
+          { speaker: 'a', en: 'Clerk: Yes, right here and attach your ID copy.', ar: 'الموظف: نعم، هنا بالضبط وأرفق نسخة من هويتك.' }
+        ]
+      },
+      shopping: {
+        vocab: [
+          { en: 'Fitting Room', ar: 'غرفة القياس' },
+          { en: 'Discount', ar: 'تخفيض / خصم' },
+          { en: 'Receipt', ar: 'إيصال الشراء' },
+          { en: 'Cashier', ar: 'أمين الصندوق' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Customer: How much is this shirt?', ar: 'الزبون: بكم هذا القميص؟' },
+          { speaker: 'b', en: 'Seller: It is twenty dollars, and it is on sale.', ar: 'البائع: إنه بعشرين دولاراً، وهو في التخفيضات.' }
+        ]
+      },
+      restaurant: {
+        vocab: [
+          { en: 'Menu', ar: 'قائمة الطعام' },
+          { en: 'Waiter', ar: 'نادل' },
+          { en: 'Bill', ar: 'الفاتورة / الحساب' },
+          { en: 'Table for two', ar: 'طاولة لشخصين' }
+        ],
+        dialogue: [
+          { speaker: 'a', en: 'Waiter: Are you ready to order?', ar: 'النادل: هل أنت جاهز للطلب؟' },
+          { speaker: 'b', en: 'Customer: Yes, I would like the grilled chicken, please.', ar: 'الزبون: نعم، أريد الدجاج المشوي من فضلك.' }
+        ]
+      }
+    };
+
+    let currentCategory = 'airport';
+
+    // نطق النص بالإنجليزية بدقة عالية وبدون الحاجة لملفات خارجية
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // إيقاف أي صوت سابق
+        
+        // إزالة اسم الشخصية من الحوار (مثل Agent: أو Doctor:) قبل النطق
+        const cleanText = text.replace(/^[A-Za-z]+:\s*/, '');
+        
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.88; // سرعة مناسبة للتعلم
+        utterance.pitch = 1.0;
+        
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("المتصفح الخاص بك لا يدعم خاصية النطق الصوتي.");
+      }
+    }
+
+    function switchCategory(cat, evt) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      if(evt) evt.target.classList.add('active');
+      renderContent();
+      loadQuiz();
+    }
+
+    function renderContent() {
+      const vocabContainer = document.getElementById('vocabContainer');
+      const dialogueContainer = document.getElementById('dialogueContainer');
+      const catData = data[currentCategory];
+
+      vocabContainer.innerHTML = catData.vocab.map(item => `
+        <div class="vocab-card" onclick="speakText('${item.en.replace(/'/g, "\\'")}')">
+          <div>
+            <span class="en-term">${item.en}</span>
+            <span class="ar-term">${item.ar}</span>
+          </div>
+          <button class="btn-audio">🔊</button>
+        </div>
+      `).join('');
+
+      dialogueContainer.innerHTML = catData.dialogue.map(item => `
+        <div class="dialogue-bubble speaker-${item.speaker}" onclick="speakText('${item.en.replace(/'/g, "\\'")}')">
+          <div class="dialogue-en">${item.en}</div>
+          <div class="dialogue-ar">${item.ar}</div>
+        </div>
+      `).join('');
+    }
+
+    const quizData = [
+      { q: 'ما معنى كلمة "Boarding Pass"؟', options: ['بطاقة الركوب', 'مفتاح الغرفة', 'وصفة طبية', 'إيصال الشراء'], correct: 0 },
+      { q: 'ما معنى كلمة "Prescription"؟', options: ['مراقبة الجوازات', 'وصفة طبية', 'غرفة القياس', 'قائمة الطعام'], correct: 1 },
+      { q: 'كيف تقول "مفتاح الغرفة" بالإنجليزية؟', options: ['Room Key', 'Emergency Room', 'Official ID', 'Table for two'], correct: 0 },
+      { q: 'ما معنى كلمة "Discount"؟', options: ['توقيع', 'موعد', 'تخفيض / خصم', 'استلام الأمتعة'], correct: 2 }
+    ];
+
+    function loadQuiz() {
+      const randomQuiz = quizData[Math.floor(Math.random() * quizData.length)];
+      document.getElementById('quizQuestion').innerText = randomQuiz.q;
+      document.getElementById('quizFeedback').innerText = '';
+
+      const optionsContainer = document.getElementById('quizOptions');
+      optionsContainer.innerHTML = randomQuiz.options.map((opt, idx) => `
+        <button class="quiz-btn" onclick="checkAnswer(${idx}, ${randomQuiz.correct})">${opt}</button>
+      `).join('');
+    }
+
+    function checkAnswer(selected, correct) {
+      const feedback = document.getElementById('quizFeedback');
+      if (selected === correct) {
+        feedback.innerText = '✨ إجابة صحيحة! أحسنت.';
+        feedback.style.color = '#10b981';
+      } else {
+        feedback.innerText = '❌ إجابة خاطئة، حاول مرة أخرى.';
+        feedback.style.color = '#ef4444';
+      }
+    }
+
+    renderContent();
+    loadQuiz();
+  </script>
+</body>
+</html>
