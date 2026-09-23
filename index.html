@@ -57,6 +57,41 @@
       padding: 0 20px;
     }
 
+    /* شريط التحكم بالسرعة */
+    .controls-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .speed-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .speed-select {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 2px solid var(--primary);
+      background: white;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      outline: none;
+    }
+
     .nav-categories {
       display: flex;
       gap: 12px;
@@ -265,6 +300,20 @@
 
   <div class="main-container">
 
+    <!-- شريط إعدادات التحكم بالسرعة -->
+    <div class="controls-bar">
+      <span>⚙️ إعدادات الصوتيّات:</span>
+      <div class="speed-control">
+        <label for="speedRate">سرعة النطق:</label>
+        <select id="speedRate" class="speed-select">
+          <option value="0.5">0.5x (بطيء جداً للمبتدئين)</option>
+          <option value="0.75" selected>0.75x (بطيء / مناسب للتعلم)</option>
+          <option value="1.0">1.0x (سرعة طبيعية)</option>
+          <option value="1.25">1.25x (سريع)</option>
+        </select>
+      </div>
+    </div>
+
     <div class="nav-categories">
       <button class="cat-btn active" onclick="switchCategory('airport', event)">المطار</button>
       <button class="cat-btn" onclick="switchCategory('hospital', event)">المستشفى</button>
@@ -375,19 +424,19 @@
 
     let currentCategory = 'airport';
 
-    // نطق النص بالإنجليزية بدقة عالية وبدون الحاجة لملفات خارجية
     function speakText(text) {
       if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // إيقاف أي صوت سابق
+        window.speechSynthesis.cancel();
         
-        // إزالة اسم الشخصية من الحوار (مثل Agent: أو Doctor:) قبل النطق
         const cleanText = text.replace(/^[A-Za-z]+:\s*/, '');
-        
         const utterance = new SpeechSynthesisUtterance(cleanText);
         utterance.lang = 'en-US';
-        utterance.rate = 0.88; // سرعة مناسبة للتعلم
-        utterance.pitch = 1.0;
         
+        // قراءة قيمة السرعة المحددة من القائمة
+        const selectedSpeed = parseFloat(document.getElementById('speedRate').value);
+        utterance.rate = selectedSpeed;
+        
+        utterance.pitch = 1.0;
         window.speechSynthesis.speak(utterance);
       } else {
         alert("المتصفح الخاص بك لا يدعم خاصية النطق الصوتي.");
